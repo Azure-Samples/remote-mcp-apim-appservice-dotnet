@@ -1,57 +1,51 @@
-# Project Name
+<!--
+---
+name: Remote Microsoft Graph MCP using Azure API Management (Experimental)
+description: Use Azure API Management as the AI Gateway for MCP Servers, providing tools that calls Microsoft Graph API
+page_type: sample
+languages:
+- dotnet
+- bicep
+- azdeveloper
+products:
+- azure-api-management
+- microsoft-graph
+- azure
+urlFragment: remote-mcp-apim-msgraph
+---
+-->
 
-(short, 1-3 sentenced, description of the project)
+# Secure Remote Microsoft Graph MCP Servers using Azure API Management (Experimental)
 
-## Features
+![Diagram](mcp-client-authorization.gif)
 
-This project framework provides the following features:
+Azure API Management acts as the [AI Gateway](https://github.com/Azure-Samples/AI-Gateway) for MCP servers. 
 
-* Feature 1
-* Feature 2
-* ...
+This sample implements the latest [MCP Authorization specification](https://modelcontextprotocol.io/specification/2025-03-26/basic/authorization#2-10-third-party-authorization-flow). Then calls Microsoft Graph API in MCP tool.
 
-## Getting Started
+This is a [sequence diagram](infra/app/apim-oauth/diagrams/diagrams.md) to understand the flow.
 
-### Prerequisites
+## Deploy Remote MCP Server to Azure
 
-(ideally very short, if any)
+Run this [azd](https://aka.ms/azd) command to provision the api management service, web app(with code) and all other required Azure resources
 
-- OS
-- Library version
-- ...
+    ```shell
+    azd up
+    ```
 
-### Installation
+### MCP Inspector
 
-(ideally very short)
+1. In a **new terminal window**, install and run MCP Inspector
 
-- npm install [package name]
-- mvn install
-- ...
+    ```shell
+    npx @modelcontextprotocol/inspector
+    ```
 
-### Quickstart
-(Add steps to get up and running quickly)
-
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+1. CTRL click to load the MCP Inspector web app from the URL displayed by the app (e.g. http://127.0.0.1:6274/#resources)
+1. Set the transport type to `SSE`
+1. Set the URL to your running API Management SSE endpoint displayed after `azd up` and **Connect** ![azd up result](azdup.PNG)
+1. **List Tools**.  
+1. Click the `ShowUserProfile` tool and **Run Tool**. The tool will return your user profile.
 
 
-## Demo
 
-A demo app is included to show how to use the project.
-
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
