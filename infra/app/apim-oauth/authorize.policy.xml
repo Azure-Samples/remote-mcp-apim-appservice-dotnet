@@ -31,7 +31,7 @@
             }" />
         <!-- STEP 3: Extract client information and create state parameter -->
         <set-variable name="clientId" value="@((string)context.Request.Url.Query.GetValueOrDefault("client_id", ""))" />
-        <set-variable name="state" value="@((string)Guid.NewGuid().ToString())" />
+        <set-variable name="state" value="@((string)context.Request.Url.Query.GetValueOrDefault("state", Guid.NewGuid().ToString()))" />
         <!-- STEP 4: Construct the Entra ID authorization URL -->
         <!-- Base URL for Entra ID authorization endpoint -->
         <set-variable name="baseAuthUrl" value="https://login.microsoftonline.com/{{EntraIDTenantId}}/oauth2/v2.0/authorize?response_type=code" />

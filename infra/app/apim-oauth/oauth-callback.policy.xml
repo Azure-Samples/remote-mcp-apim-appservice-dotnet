@@ -82,12 +82,12 @@
         <cache-store-value duration="3600" 
             key="@($"EntraToken-{context.Variables.GetValueOrDefault("sessionId")}")"
             value="@(context.Response.Body.As<JObject>(preserveContent: true).ToString())" />
-        
-        <!-- STEP 10: Redirect back to MCP client with confirmation code -->
+            
+          <!-- STEP 10: Redirect back to MCP client with confirmation code -->
         <return-response>
             <set-status code="302" reason="Found" />
             <set-header name="Location" exists-action="override">
-                <value>@($"{context.Variables.GetValueOrDefault("callbackRedirectUri")}?code={context.Variables.GetValueOrDefault("mcpConfirmConsentCode")}&state={context.Variables.GetValueOrDefault("mcpState")}&state_session=statesession123")</value>
+                <value>@($"{context.Variables.GetValueOrDefault("callbackRedirectUri")}?code={context.Variables.GetValueOrDefault("mcpConfirmConsentCode")}&state={context.Variables.GetValueOrDefault("entraState")}&state_session=statesession123")</value>
             </set-header>
             <set-body />
         </return-response>

@@ -13,12 +13,12 @@
         <!-- STEP 1: Extract client registration data from request -->
         <set-variable name="requestBody" value="@(context.Request.Body.As<JObject>(preserveContent: true))" />
           <!-- STEP 2: Store registration information in cache -->
-        <cache-store-value duration="3600" 
+        <cache-store-value duration="86400" 
             key="DynamicClientRegistration" 
             value="@(context.Variables.GetValueOrDefault<JObject>("requestBody").ToString())" />
         
         <!-- Store the redirect URI -->
-        <cache-store-value duration="3600" 
+        <cache-store-value duration="86400" 
             key="ClientRedirectUri" 
             value="@(context.Variables.GetValueOrDefault<JObject>("requestBody")["redirect_uris"][0].ToString())" />
         
@@ -51,7 +51,8 @@
                     ["client_id"] = "{{McpClientId}}",
                     ["client_id_issued_at"] = clientIdIssuedAt,
                     ["client_secret_expires_at"] = clientSecretExpiresAt,
-                    ["redirect_uris"] = requestBody["redirect_uris"]?.ToObject<JArray>()
+                    ["redirect_uris"] = requestBody["redirect_uris"]?.ToObject<JArray>(),
+                    ["client_name"] = requestBody["client_name"]?.ToString()
                 }.ToString();
             }</set-body>
         </return-response>
