@@ -79,8 +79,15 @@ resource cryptoValuesScript 'Microsoft.Resources/deploymentScripts@2020-10-01' =
         name: 'RESOURCEGROUP_NAME'
         value: resourceGroup().name
       }
+      {
+        name: 'SUBSCRIPTION_ID'
+        value: subscription().subscriptionId
+      }
     ]
     scriptContent: '''
+      # Set subscription context
+      Set-AzContext -Subscription $env:SUBSCRIPTION_ID
+      
       # Generate random 32 bytes (256-bit) key for AES-256
       $key = New-Object byte[] 32
       $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
@@ -92,9 +99,12 @@ resource cryptoValuesScript 'Microsoft.Resources/deploymentScripts@2020-10-01' =
       $rng.GetBytes($iv)
       $ivBase64 = [Convert]::ToBase64String($iv)
       
+      # Create APIM context with subscription ID
+      $apimContext = New-AzApiManagementContext -ResourceGroupName $env:RESOURCEGROUP_NAME -ServiceName $env:APIM_NAME
+      
       # Set the values in APIM named values
-      New-AzApiManagementNamedValue -Context (New-AzApiManagementContext -ResourceGroupName $env:RESOURCEGROUP_NAME -ServiceName $env:APIM_NAME) -NamedValueId "EncryptionKey" -Name "EncryptionKey" -Value $keyBase64 -Secret
-      New-AzApiManagementNamedValue -Context (New-AzApiManagementContext -ResourceGroupName $env:RESOURCEGROUP_NAME -ServiceName $env:APIM_NAME) -NamedValueId "EncryptionIV" -Name "EncryptionIV" -Value $ivBase64 -Secret
+      New-AzApiManagementNamedValue -Context $apimContext -NamedValueId "EncryptionKey" -Name "EncryptionKey" -Value $keyBase64 -Secret
+      New-AzApiManagementNamedValue -Context $apimContext -NamedValueId "EncryptionIV" -Name "EncryptionIV" -Value $ivBase64 -Secret
     '''
   }
 }

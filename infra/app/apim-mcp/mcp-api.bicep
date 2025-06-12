@@ -66,5 +66,27 @@ resource mcpMessageOperation 'Microsoft.ApiManagement/service/apis/operations@20
   }
 }
 
+resource mcpStreamableHttpGetOperation 'Microsoft.ApiManagement/service/apis/operations@2023-05-01-preview' = {
+  parent: mcpApi
+  name: 'mcp-streamable-http-get'
+  properties: {
+    displayName: 'MCP Streamable HTTP GET Endpoint'
+    method: 'GET'
+    urlTemplate: '/'
+    description: 'Streamable HTTP GET endpoint for MCP Server'
+  }
+}
+
+resource mcpStreamableHttpPostOperation 'Microsoft.ApiManagement/service/apis/operations@2023-05-01-preview' = {
+  parent: mcpApi
+  name: 'mcp-streamable-http-post'
+  properties: {
+    displayName: 'MCP Streamable HTTP POST Endpoint'
+    method: 'POST'
+    urlTemplate: '/'
+    description: 'Streamable HTTP POST endpoint for MCP Server'
+  }
+}
+
 // Output the API ID for reference
 output apiId string = mcpApi.id
